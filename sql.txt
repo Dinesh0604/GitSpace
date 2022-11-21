@@ -1,0 +1,639 @@
+/*
+Multi line comment
+Datatypes
+charcter data - ex : name , email_id,etc.. - CHAR(10)->length,VARCHAR(100) maximum 100 char can store
+CHAR - is fixed length maximum(255)bytes ex : "nyc  " means stores other char at space . it is useful for abbrevations
+VARCHAR - it is not max(65535)bytes ex : "nyc" only utilize the given VARCHAR 
+
+CHARCATER SET
+
+TEXT - FILE,BIG DATA
+BLOB - IMAGES IN BINARY FORM
+
+TEXT - TIMY TEXT - 255 , TEXT - 65535 , MEDIUM TEXT - 16777215 , LONGTEXT - 4,294,967,295
+BLOB -  TIMY BLOB , BLOB , MEDIUM  BLOB , LONG BLOB 
+
+
+
+NUMERIC - INT , DECIMAL(5,2) - 999.99 , 
+INT - TIMYINT - 128 TO 127 , SMALLINT  -32768 TO 32767 MEDIUMINT , INT , BIGINT
+DEC - FLOAT (P,S), DOUBLE  (P,S)
+
+TEMPORAL DATA - DATE ,DTAETIME , TIMELAMP , YEAR ,TIME
+
+
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+create database learnsql ;
+use learnsql ;
+create table student(
+id int primary key,
+name varchar(30),
+gpa decimal(3,2)
+);
+alter table student add age int1;
+alter table student drop age ;
+
+insert into student values(1,"ajay",2.0);
+insert into student (age) value(23);
+describe student ;
+insert into student values(2,"ajay",2.0,23);
+insert into student values(3,"ajay",2.0);
+insert into student values(4,"ajay",2.0);
+select id,name from student ;
+select * from student ;
+
+
+
+create table company(
+empid int primary key ,
+name varchar(30),
+jobdec varchar(30),
+salary int);
+
+drop tables company ;
+
+describe company ;
+
+insert into company values (1,"dinesh","ceo",1000000),
+(2,"satish","manager",500000),
+(3,"vijay","owner2",10000000),
+(4,"ajay","mainowner",10000828),
+(5,"ram","admin",29973),
+(6,"ashok","hr",50000),
+(7,"raghul","engineer",10090),
+(8,"john","engineer",35767),
+(9,"abdul","engineer",354767),
+(10,"aksay","engineer",35677),
+(11,"raagu","engineer",34667),
+
+(12,"aravind","engineer",35467);
+ 
+
+insert into company values (13,"aravind","engineer",35467);
+
+select * from company ;
+
+
+select * from company 
+where jobdec = "ceo" ; -- only give the ceo who are
+
+select empid,name from company 
+where name <> "dinesh" ;
+
+select * from company 
+where name <> "dinesh" ; -- except name print all
+
+
+select * from company 
+where salary < 10000000 and jobdec = "engineer";
+
+
+select * from company 
+where  jobdec = "engineer" or jobdec = "hr";
+-- both are same but in method is more appropriate
+select * from company 
+where  jobdec in ("engineer"  ,"hr")
+limit 5 ;
+
+select * from company 
+where jobdec not in ("ceo" , "manager");
+
+select * from company 
+where salary between 50000 and 100000 ;
+
+select * from company 
+limit 5 ;
+
+
+-- LIKE 
+-- WILDCARD % (ZERO OR MORE CHARACTER ) _(ONE CHARACTER) ;
+
+select * from company 
+where NAME LIKE 'A%' ; -- strating a letter only 
+
+select * from company 
+where name like 'a%l' ; -- print first and last letter
+
+select * from company 
+where name like '%a%' ; -- search miiddle letter 
+
+select * from company 
+where name   like '__a%' ; -- search the 3 letter is a 
+
+
+UPDATE COMPANY
+SET NAME = "DINESH " ;
+
+SHOW VARIABLES ;
+
+set sql_safe_updates = 0;
+
+UPDATE COMPANY
+SET jobdec = "engineer " 
+where jobdec ="DINESH";
+
+delete from company
+where empid = 13 ;
+
+select distinct jobdec from company ; -- only givr unique name 
+
+select * from company 
+order by name ; -- sortby name in order
+
+select * from company 
+order by salary ; -- sort by amount by ascending order
+
+select * from company 
+order by salary desc ;-- sort by amount by descending order
+
+
+select * from company 
+order by salary , name ;
+
+select * from company 
+where jobdec = "hr" 
+order by salary  ;
+
+select * from company 
+order by ( case jobdec
+when'ceo' then 1
+when 'manager' then 2
+when 'owner' then 3
+when 'hr' then 4
+when 'engineer' then 4
+else 100 end
+ );
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+select*from company ;
+
+SELECT 
+    COUNT(*) total
+FROM
+    company;
+
+select count(*) from company -- no of count of engineer
+where  jobdec = "engineer";
+
+select avg(salary)  from company -- show the total salary avg of engineer
+where  jobdec = "engineer";
+
+
+
+select sum(salary)  from company -- show the total salary exp of engineer
+where  jobdec = "engineer";
+
+
+select max(salary)  from company -- show the amximum salary of the employee
+where  jobdec = "engineer";
+
+
+select min(salary)  from company -- show the minmum salary of the employee
+where  jobdec = "engineer";
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- string 
+
+
+select ucase(name) name, salary from company ; -- show in uppercase and name - is alias name
+
+select  name, char_length(name)charcount from company ; -- show the number of counts inthe name column
+
+
+select  name,concat('Rs .',salary)  from company ; -- add the what we at first 
+
+
+select  name,concat('Rs .',format(salary,0))  from company ; -- show the sperate value for money
+
+select  name,left(jobdec,3)  from company ; -- show the first three character of job
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+-- date and date fuction
+
+alter table company add column hrdate date;
+
+select* from company ;
+
+
+update company
+set hrdate = "2014-08-04";
+
+
+update company
+set hrdate = "2002-06-04"
+where jobdec = "engineer";
+
+
+select date(now());
+select now() ; -- show time and date
+select curdate(); -- show current date 
+
+select date_format(curdate(),"%d/%m/%y")as date ; -- change format
+
+select datediff(curdate(),"2022/11,07"); -- show the diiferences
+
+select date_add(curdate(),interval 100 day) ;
+select date_add(curdate(),interval 100 month) ; -- we can add date  and set up interval
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- group by and having
+
+select jobdec,avg(salary)
+ from company
+group  by jobdec ;
+
+
+
+
+select jobdec,count(empid)
+ from company
+group  by jobdec ;
+
+
+
+select jobdec,count(empid)
+ from company
+group  by jobdec 
+having count(empid)>1
+order by jobdec ;
+
+
+
+select jobdec,count(empid)
+ from company
+ where salary >35000
+group  by jobdec 
+having count(empid)>1
+order by jobdec ;
+
+
+
+
+
+select jobdec,sum(salary)
+ from company
+group  by jobdec 
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+use learnsql ;
+
+drop table company ;
+drop table emp ;
+
+create table emp(
+empid int primary key auto_increment,
+name varchar(30) not null,
+jobdec varchar(30)default "unassinged",
+salary int ,
+pan varchar(10) unique ,
+check (salary >10000));
+
+
+insert into emp (name,salary) values ("don",100000);
+
+select * from emp ;
+
+insert into emp values (2,"fish","hr",50000,"mlk2lhj");
+
+insert into emp (pan,salary) values ("snksn",828239008) ;
+
+
+
+alter table company 
+modify name varchar(30)not null ;
+
+-- drop not null constant 
+
+alter table company 
+modify name varchar(30);
+
+ -- add  default 
+ 
+ alter table company 
+ alter jobdec set defaUlt "unassigned" ;
+
+-- drop default
+ alter table company 
+ alter jobdec drop default ;
+
+-- check table
+ alter table company 
+add constraint checksalary check (salary >10000);
+
+-- drop check 
+ alter table company 
+drop constraint checksalary ;
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+-- foreign key 
+use learnsql ;
+
+create table branch(
+ branchid int primary key ,
+ brname varchar (20) not null ,
+ addr varchar(300) 
+);
+show variables ;
+
+
+set foreign_key_checks = @old_foreign_key_checks ;
+set @old_foreign_key_checks = 0;
+
+
+create table if not exists emp(
+empid int primary key auto_increment,
+name varchar(30) not null,
+jobdec varchar(30)default "unassinged",
+salary int ,
+Brancheid int,
+constraint frke_brancheid
+foreign  key (Brancheid)
+references Branches (Brancheid))
+
+;
+drop table emp ;
+
+alter table emp
+add constraint frke_brancheid
+foreign  key (Brancheid)
+references Branches (Brancheid)
+;
+alter table branch
+add constraint frke_addid
+foreign  key (addr)
+references adds (addr)
+;
+
+alter table emp
+drop foreign key frke_brancheid;
+
+alter table branch
+drop foreign key frke_addid;
+
+
+
+
+
+drop table branch ;
+
+select * from branch ;
+
+
+----------------------------------------------------------------------------------------------
+
+
+-- index 
+
+create table empl(
+empid int primary key auto_increment,
+name varchar(30) not null,
+jobdec varchar(30)default "unassinged",
+salary int ,
+pan varchar(10) unique ,
+check (salary >10000));
+
+
+
+show index from empl ;
+
+
+create index name on empl(name);
+
+
+alter table empl
+drop index name ;
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+-- join 
+
+use learnsql ;
+drop table branch;
+drop table emp;
+
+create table branch(
+ branchid int primary key ,
+ brname varchar (20) not null ,
+ addr varchar(300) 
+);
+
+
+
+create table if not exists emp(
+empid int primary key auto_increment,
+name varchar(30) not null,
+jobdec varchar(30)default "unassinged",
+salary int ,
+Brancheid int,
+constraint frke_brancheid
+foreign  key (Brancheid)
+references Branches (Brancheid));
+insert into branch values(1,"coimbatore", "120 b block"),
+(2,"chennai", "48 kh road"),
+(3,"madurai","221 bk road ");
+
+insert into emp values (1,"dinesh","ceo",1000000,2),
+(2,"satish","manager",500000,2),
+(3,"vijay","owner2",10000000,1),
+(4,"ajay","mainowner",10000828,1),
+(5,"ram","admin",29973,3),
+(6,"ashok","hr",50000,1),
+(7,"raghul","engineer",10090,2),
+(8,"john","engineer",35767,2),
+(9,"abdul","engineer",354767,3),
+(10,"aksay","engineer",35677,3),
+(11,"raagu","engineer",34667,1),
+
+(12,"aravind","engineer",35467,3);
+ 
+
+
+select * from branch ;
+select * from emp ;
+
+select emp.empid,emp.name,emp.jobdec,branch.brname
+from emp
+right join branch -- left show all right cross
+on emp.Brancheid = branch.branchid 
+order by emp.empid ;
+
+
+
+select e.empid,e.name,e.jobdec,b.brname
+from emp as e
+right join branch as b-- left show all right , cross
+on e.Brancheid = b.branchid 
+order by e.empid ;
+
+
+
+select e.empid,e.name,e.jobdec,b.brname
+from emp as e,branch as b
+where e.Brancheid  = b.branchid 
+order by e.name ;
+
+------------------------------------------------------------------------------------------------------------------------------
+
+
+-- union 
+set @old_foreign_key = 0 ;
+
+use learnsql ;
+
+create table client(
+ clid int primary key ,
+ loc varchar (20) not null ,
+ addr varchar(300) 
+);
+
+insert into client values(2,"newyork","25 10thblock"),
+(1,"coimbatore","120 b block"),
+(3,"dubai","11th main orad");
+
+
+
+create table branch(
+ branchid int primary key ,
+ brname varchar (20) not null ,
+ addr varchar(300) 
+);
+
+drop table client ;
+
+select * from client ;
+select * from branch ;
+
+
+
+
+
+select * from branch 
+union all
+select * from client ;
+
+
+
+select * from branch 
+union 
+select * from client ;
+
+
+------------------------------------------------------------------------------------------------------------------------
+
+-- sub queries
+
+
+select * from emp ;
+select * from branch ;
+
+select * from emp
+where brancheid = ( select branchid from branch
+where brname = "chennai");
+
+-- min salary 
+select * from emp
+where salary = ( select min(salary) from emp);
+
+-- exists
+
+select branchid, brname
+ from branch 
+ where exists (
+ select * from emp
+ where jobdec = "hr" and branch.branchid = emp.brancheid);
+
+
+--------------------------------------------------------------------------------------------------------------------------------
+
+
+
+-- any
+
+select branchid,brname,addr
+from branch
+where exists (select * from emp
+where salary = 20000 and branch.branchid = emp.brancheid);
+
+
+
+select * from branch
+where branchid = any(
+select brancheid from emp 
+where salary > 2500000);
+
+----- all
+
+
+select * from emp 
+where brancheid <> all(
+select branchid from branch 
+where brname in ("chennai","coimbatore"));
+
+-- view 
+
+create view empbr
+as
+select e.empid,e.name,e.jobdec,b.brname
+from emp as e
+inner join branch as b-- left show all right , cross
+on e.Brancheid = b.branchid 
+order by e.empid ;
+
+select  * from empbr ;
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+
+
+public class SqlJava {
+    public static void main(String[] args) {
+        String url = "jdbc:mysql://localhost:3306/users" ;
+        String username = "root" ;
+        String password = "Dinesh2002" ;
+
+
+        try {
+            Connection co =  DriverManager.getConnection(url,username,password);
+          String sql = "insert into users (username , fullname ,password ,email)" +
+                  "values (?,?,?,?)" ;
+           PreparedStatement  st = co.prepareStatement(sql);
+           st.setString(1,"dinesh");
+           st.setString(2,"dinesh");
+           st.setString(3,"dinesh2002");
+           st.setString(4,"dinesh007gmail.com");
+           
+           
+           
+            int rows = st.executeUpdate();
+            if (rows > 0 ){
+                System.out.println("a new users inserted ");
+            }
+
+
+                co.close();
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+        }
+    }
+}
+
+-----------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
